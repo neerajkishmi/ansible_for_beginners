@@ -1,0 +1,29 @@
+---
+- name: this playbook install httpd
+  hosts: all
+  become: true
+  gather_facts: yes
+  tasks:
+  - name: stop httpd service
+    service:
+      name: httpd
+      state: stopped
+    when: ansible_os_family == "RedHat"
+
+  - name: uninstall httpd
+    yum:
+      name: httpd
+      state: removed
+    when: ansible_os_family == "RedHat"
+
+  - name: stop apcahe2 services
+    service:
+      name: apache2
+      state: stopped
+    when: ansible_os_family == "Debian"
+
+  - name: uninstall apache2
+    apt:
+      name: apache2
+      state: absent
+    when: ansible_os_family == "Debian"
